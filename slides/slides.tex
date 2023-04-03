@@ -1,0 +1,52 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{pifont}
+\usepackage{amsmath,amsthm,amssymb,mathtools,enumerate}
+\usepackage{tikz}
+\usepackage[short,nocomma]{optidef}
+
+
+\usetheme{Madrid}
+\usefonttheme[onlymath]{serif}
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{navigation symbols}{} %remove navigation symbols
+
+\newcommand\encircle[1]{%
+  \tikz[baseline=(X.base)] 
+    \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
+
+\colorlet{beamer@blendedblue}{green!40!black}
+
+\graphicspath{ {../images/} }
+
+\DeclarePairedDelimiterX\set[1]\lbrace\rbrace{\def\given{\;\delimsize\vert\;}#1}
+
+\title[Th\'eorie de la Complexit\'e Quantique]{Th\'eorie de la Complexit\'e: \\Informatique Quantique}
+\author{Tom Sarry}
+\institute[UdeM]{Universit\'e de Montr\'eal}
+\date[April 2023]{\today}
+\logo{\includegraphics[height=.5cm]{udem.png}}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table des Mati\`eres}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+  \frametitle{Table des Mati\`eres}
+  \tableofcontents
+\end{frame}
+
+
+\section{Introduction}
+
+
+\end{document}

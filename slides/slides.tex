@@ -1,40 +1,36 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{pifont}
 \usepackage{amsmath,amsthm,amssymb,mathtools,enumerate}
+\usepackage[francais]{babel}
+\usepackage{datetime} 
+\usepackage{nicefrac} 
+\usepackage[normalem]{ulem}
 \usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+\usepackage{physics} 
 \usepackage[short,nocomma]{optidef}
 
 
-\usetheme{Madrid}
+\usetheme{metropolis}
 \usefonttheme[onlymath]{serif}
 \setbeamertemplate{enumerate items}[default]
 \setbeamertemplate{navigation symbols}{} %remove navigation symbols
-
-\newcommand\encircle[1]{%
-  \tikz[baseline=(X.base)] 
-    \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
-
-\colorlet{beamer@blendedblue}{green!40!black}
 
 \graphicspath{ {../images/} }
 
 \DeclarePairedDelimiterX\set[1]\lbrace\rbrace{\def\given{\;\delimsize\vert\;}#1}
 
-\title[Th\'eorie de la Complexit\'e Quantique]{Th\'eorie de la Complexit\'e: \\Informatique Quantique}
+\title[Th\'eorie de la Complexit\'e Quantique]{Introduction \`a la Th\'eorie de Complexit\'e Quantique}
 \author{Tom Sarry}
 \institute[UdeM]{Universit\'e de Montr\'eal}
-\date[April 2023]{\today}
-\logo{\includegraphics[height=.5cm]{udem.png}}
+\date[]{\today}
+\titlegraphic{\vspace{7cm}\flushright\includegraphics[height=1cm]{udem.png}} 
 
-\AtBeginSection[]
-{
-  \begin{frame}
-    \frametitle{Table des Mati\`eres}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
+\newcommand{\bqp}{\textsf{\textbf{BQP}}}
+\newcommand{\bpp}{\textsf{\textbf{BPP}}}
 
 \begin{document}
 
@@ -47,6 +43,412 @@
 
 
 \section{Introduction}
+
+\begin{frame}
+  \frametitle{Le Probl\`eme}
+
+  \begin{enumerate}
+    \item Machines de Turing (Programmes de Branchement, Circuits Bool\'eens,...) sont bas\'ees sur la \textbf{physique classique}
+    \item On a de bonnes raisons de croire que le monde ob\'eit \`a la \textbf{physique quantique}
+  \end{enumerate}
+  Comment \'etudier la puissance du calcul quantique ?
+\end{frame}
+
+\begin{frame}
+  \frametitle{Les Questions}
+
+  \begin{enumerate}
+    \item Utiliser les outils existants ? (Mod\`eles de Calcul, classes de complexit\'e)
+    \item Situer la puissance de l'ordinateur quantique dans la hi\'erarchie connue
+    \item R\'esoudre des questions ouvertes? \pause \textsf{P} $\neq$ \textsf{NP}
+  \end{enumerate}
+\end{frame}
+
+\section{Mod\`eles de Calcul Quantique}
+
+\begin{frame}
+  \frametitle{Diff\'erents Mod\`eles}
+
+  Extension logique: adapter les mod\`eles existants pour supporter le calcul quantique:
+  \begin{itemize}
+    \item TM (Turing Machine) $\rightarrow$ QTM (Quantum TM)
+    \item Finite Automaton (FA) $\rightarrow$ QFA (Quantum FA)
+    \item Boolean Circuits $\rightarrow$ Quantum Circuits: vu en classe!
+    \item Branching Programs (BP) $\rightarrow$ QBP (Quantum BP)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dates Importantes}
+
+  \begin{itemize}
+    \item Turing 1936: Machines de Turing
+    \item Cook 1971: Comment prouver $X \in \textsf{NP}$
+    \item Baianu 1971: QFA
+    \item Benioff 1980: Machine de calcul quantique
+    \item Deutsch 1985: QTM
+    \item Yao 1993: Circuit Quantique
+    \item Bernstein, Verizani 1997: Universal QTM (avec co\^ut de simulation \emph{raisonnable})
+    \item Nakanishi et al, 2000: Programme de Branchement Quantique
+  \end{itemize}
+\end{frame}
+
+
+\section{\textbf{LA} classe de Compl\'exit\'e Quantique: \bqp}
+
+\subsection{Circuits Quantiques}
+
+\begin{frame}
+  \frametitle{\bqp \ par Circuits Quantiques}
+
+  $L \in \bqp$:
+  \begin{itemize}
+    \item $\iff \exists$ un algo. quantique qui r\'esolve le probl\`eme de d\'ecision avec haute probabilit\'e en temps poly.
+    \item $\iff \exists$ une famille uniforme de temps poly de circuits quantiques $\set{Q_n:n\in \mathbb{N}}$ tel que:
+          \begin{enumerate}
+            \item $\forall n \in \mathbb{N}$, $Q_n$ prend $n$ qubits en entr\'ee et produit un bit en sortie
+            \item $\forall x \in L,\ Pr(Q_{|x|}(x) = 1) \geq \nicefrac{2}{3}$
+            \item $\forall x \notin L,\ Pr(Q_{|x|}(x) = 0) \geq \nicefrac{2}{3}$
+          \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+
+\subsection{Machines de Turing Quantiques}
+
+\begin{frame}
+  \frametitle{Rappel: Machines de Turing}
+
+  \begin{enumerate}
+    \item Machines de Turing D\'eterministes: un chemin
+    \item Machines de Turing Non D\'eterministes: plusieurs chemins
+    \item Machines de Turing Probabilistes: plusieurs chemins, n'en suit qu'un
+    \item Machines de Turing Quantique: \pause
+          suit plusieurs chemins en superposition
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rappel: \bpp \ (Bounded-error Probabilistic Poly-time)}
+
+  $L \in \bpp$: \ probl\`emes qui peuvent \^etre efficacement r\'esolus
+  \begin{itemize}
+    \item $\iff \exists$ un algo. qui r\'esolve le probl\`eme de d\'ecision avec haute probabilit\'e en temps poly.
+    \item $\iff \exists$ une Machine de Turing Probabiliste $M$ tel que:
+          \begin{enumerate}
+            \item $M$ fonctionne en temps poly
+            \item $\forall x \in L,\ Pr(M \downarrow x = 1) \geq \nicefrac{2}{3}$
+            \item $\forall x \notin L,\ Pr(M \downarrow x = 0) \geq \nicefrac{2}{3}$
+          \end{enumerate}
+  \end{itemize}
+
+  Peut diminuer la probabilit\'e d'erreur \`a $2^{-n^c}$ avec des votes majoritaires (Bornes de Chernoff)
+\end{frame}
+
+\begin{frame}
+  \frametitle{\bqp \ (Bounded-error Quantum Poly-time) par QTM}
+
+  $L \in \bqp$:
+  \begin{itemize}
+    \item $\iff \exists$ un algo. \alert{quantique} qui r\'esolve le probl\`eme de d\'ecision avec haute probabilit\'e en temps poly.
+    \item $\iff \exists$ une Machine de Turing \alert{Quantique} $M$ tel que:
+          \begin{enumerate}
+            \item $M$ fonctionne en temps poly
+            \item $\forall x \in L,\ Pr(M \downarrow x = 1) \geq \nicefrac{2}{3}$
+            \item $\forall x \notin L,\ Pr(M \downarrow x = 0) \geq \nicefrac{2}{3}$
+          \end{enumerate}
+  \end{itemize}
+
+  Peut diminuer la probabilit\'e d'erreur \`a $2^{-n^c}$ avec des votes majoritaires (Bornes de Chernoff)
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rappel: Machine de Turing Probabiliste}
+
+  \textbf{PTM}: $M = (Q, \Sigma, \Gamma, \delta, q_0, F)$
+
+  \begin{itemize}
+    \item $Q$ \'etats
+    \item $\Sigma$ alphabet d'entr\'ee
+    \item $\Gamma$ alphabet bande de calcul ($\Sigma \subseteq \Gamma, \texttt{\#} \in \Gamma$)
+    \item $\delta$ fonction de transition \\
+          $\delta: Q \times \Gamma \times Q \times \Gamma \times \set{L, R} \rightarrow [0,1]$
+    \item $q_0$ \'etat initial
+    \item $F \subseteq Q$ \'etats acceptants
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rappel: Machine de Turing Probabiliste}
+
+  Pas tous les $\delta$ donnent des PTM valides!\\
+  \pause
+  $\sum_{q, \tau, d} \delta(p, \gamma, q, \tau, d) = 1, \quad \forall (p, \gamma) \in Q \times \Gamma$
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \textbf{QTM} [BV97]: $M = (Q, \Sigma, \delta, q_0, F)$
+  \begin{itemize}
+    \item $Q$ \'etats
+    \item $\Sigma$ alphabet
+    \item $\delta$ machine de contr\^ole quantique $\delta: Q \times \Sigma \times \Sigma \times Q \times \set{L, R} \rightarrow \mathbb{C}$\\
+          $\delta(p,\sigma,\tau,q,d)$: amplitude
+    \item $q_0$ \'etat initial
+    \item $F \subseteq Q$ \'etats acceptants
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \begin{itemize}
+    \item Pas tous les $\delta$ donnent des QTM valides! \pause
+    \item $\delta$ repr\'esente une \textbf{application lin\'eaire} $M_\delta$, nous d\'esirons qu'elle soit \alert{unitaire} \pause
+    \item $M_\delta M_\delta^\dag = \mathbb{I} \iff$ pr\'eserve la norme $L_2$ ($M_\delta$ finie) \pause
+    \item Nombre \alert{infini} de configurations (car bande de calcul) $\implies M_\delta$ infinie
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \textbf{Objectif:} $M_\delta M_\delta^\dag = \mathbb{I} \iff \delta$ valide
+
+  \textbf{Theor\`eme (informel)} [BV97]: $\delta$ est valide ssi $M_\delta$ satisfait:
+  \begin{enumerate}
+    \item Colonnes de longueur unitaire
+    \item Colonnes avec la m\^eme position de la t\^ete de lecture sont orthogonales
+    \item Colonnes avec une position de t\^ete qui diff\`ere de 2 cases sont orthogonales
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \textbf{Objectif:} Deux configurations $c_1,c_2$ qui pourraient donner lieu a la m\^eme configuration $c$ doivent \^etre orthogonales.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \textbf{Cas 1:} T\^etes de lecture sur la m\^eme case
+  \begin{center}
+    \begin{figure}
+      \begin{tikzpicture}[every node/.style={block},
+          block/.style={minimum height=1.5em,outer sep=0pt,draw,rectangle,node distance=0pt}]
+        \node (A) {$\texttt{b}$};
+        \node (B) [left=of A] {$\texttt{a}$};
+        \node (C) [left=of B] {\ldots};
+        \node (D) [right=of A] {$\texttt{c}$};
+        \node (E) [right=of D] {\ldots};
+        \node (F) [above = 0.75cm of A] {head};
+        \draw[-latex] (F) -- (A);
+        \draw (C.north west) -- ++(-1cm,0) (C.south west) -- ++ (-1cm,0)
+        (E.north east) -- ++(1cm,0) (E.south east) -- ++ (1cm,0);
+      \end{tikzpicture}
+      \caption{$c_1$}
+    \end{figure}
+    \begin{figure}
+      \begin{tikzpicture}[every node/.style={block},
+          block/.style={minimum height=1.5em,outer sep=0pt,draw,rectangle,node distance=0pt}]
+        \node (A) {$\texttt{z}$};
+        \node (B) [left=of A] {$\texttt{a}$};
+        \node (C) [left=of B] {\ldots};
+        \node (D) [right=of A] {$\texttt{c}$};
+        \node (E) [right=of D] {\ldots};
+        \node (F) [above = 0.75cm of A] {head};
+        \draw[-latex] (F) -- (A);
+        \draw (C.north west) -- ++(-1cm,0) (C.south west) -- ++ (-1cm,0)
+        (E.north east) -- ++(1cm,0) (E.south east) -- ++ (1cm,0);
+      \end{tikzpicture}
+      \caption{$c_2$}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \textbf{Cas 2:} T\^etes de lecture diff\`erent de 2 cases
+  \begin{center}
+    \begin{figure}
+      \begin{tikzpicture}[every node/.style={block},
+          block/.style={minimum height=1.5em,outer sep=0pt,draw,rectangle,node distance=0pt}]
+        \node (A) {$\texttt{b}$};
+        \node (B) [left=of A] {$\texttt{z}$};
+        \node (C) [left=of B] {\ldots};
+        \node (D) [right=of A] {$\texttt{c}$};
+        \node (E) [right=of D] {\ldots};
+        \node (F) [above = 0.75cm of B] {head};
+        \draw[-latex] (F) -- (B);
+        \draw (C.north west) -- ++(-1cm,0) (C.south west) -- ++ (-1cm,0)
+        (E.north east) -- ++(1cm,0) (E.south east) -- ++ (1cm,0);
+      \end{tikzpicture}
+      \caption{$c_1$}
+    \end{figure}
+    \begin{figure}
+      \begin{tikzpicture}[every node/.style={block},
+          block/.style={minimum height=1.5em,outer sep=0pt,draw,rectangle,node distance=0pt}]
+        \node (A) {$\texttt{b}$};
+        \node (B) [left=of A] {$\texttt{a}$};
+        \node (C) [left=of B] {\ldots};
+        \node (D) [right=of A] {$\texttt{c}$};
+        \node (E) [right=of D] {\ldots};
+        \node (F) [above = 0.75cm of D] {head};
+        \draw[-latex] (F) -- (D);
+        \draw (C.north west) -- ++(-1cm,0) (C.south west) -- ++ (-1cm,0)
+        (E.north east) -- ++(1cm,0) (E.south east) -- ++ (1cm,0);
+      \end{tikzpicture}
+      \caption{$c_2$}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Machine de Turing Quantique}
+
+  \textbf{Cas 3:} T\^etes de lecture diff\`erent de 1 case ? \pause\\
+  Non car \alert{obligation de bouger} dans la direction $d \in \set{L,R}$ !
+  \begin{center}
+    \begin{figure}
+      \begin{tikzpicture}[every node/.style={block},
+          block/.style={minimum height=1.5em,outer sep=0pt,draw,rectangle,node distance=0pt}]
+        \node (A) {$\texttt{b}$};
+        \node (B) [left=of A] {$\texttt{a}$};
+        \node (C) [left=of B] {\ldots};
+        \node (D) [right=of A] {$\texttt{c}$};
+        \node (E) [right=of D] {\ldots};
+        \node (F) [above = 0.75cm of A] {head};
+        \draw[-latex] (F) -- (A);
+        \draw (C.north west) -- ++(-1cm,0) (C.south west) -- ++ (-1cm,0)
+        (E.north east) -- ++(1cm,0) (E.south east) -- ++ (1cm,0);
+      \end{tikzpicture}
+      \caption{$c_1$}
+    \end{figure}
+    \begin{figure}
+      \begin{tikzpicture}[every node/.style={block},
+          block/.style={minimum height=1.5em,outer sep=0pt,draw,rectangle,node distance=0pt}]
+        \node (A) {$\texttt{b}$};
+        \node (B) [left=of A] {$\texttt{a}$};
+        \node (C) [left=of B] {\ldots};
+        \node (D) [right=of A] {$\texttt{c}$};
+        \node (E) [right=of D] {\ldots};
+        \node (F) [above = 0.75cm of D] {head};
+        \draw[-latex] (F) -- (D);
+        \draw (C.north west) -- ++(-1cm,0) (C.south west) -- ++ (-1cm,0)
+        (E.north east) -- ++(1cm,0) (E.south east) -- ++ (1cm,0);
+      \end{tikzpicture}
+      \caption{$c_2$}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+\section{Analyse de \bqp}
+
+\begin{frame}
+  \frametitle{\bqp}
+
+  \begin{itemize}
+    \item \textbf{But:} \pause situer la classe, prouver inclusions
+    \item \textbf{Comment:} \pause trouver un probl\`eme $X$ \bqp-complet \pause
+    \item \textbf{Probl\`eme:} on n'en connait pas!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\sout{\bqp} Promise-\bqp}
+
+  \begin{itemize}
+    \item entr\'ee $x$
+    \item Promesse $Q(x)$
+    \item Propri\'et\'e $R(x)$
+  \end{itemize}
+  \[\forall x[Q(x) \rightarrow [M \downarrow x = 1 \iff R(x)]]\]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exemple}
+
+  \begin{itemize}
+    \item \textbf{Entr\'ee:} 1 qubit $\ket{x}$
+    \item \textbf{Probl\`eme:} $\ket{x} = \ket{1}$ ? \pause
+    \item \textbf{Promesse:} $\ket{x} = \ket{1} \lor \ket{x} = \frac{\sqrt{3}}{2} \ket{0} + \frac{1}{2} \ket{1}$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\sout{\bqp} Promise-\bqp}
+
+  \textbf{APPROX-QCIRCUIT-PROB (AQP):}
+  \begin{itemize}
+    \item \textbf{Entr\'ee:} Circuit Quantique $C$ sur $n$ qubits, $\alpha, \beta \in [0,1]$ \pause
+    \item \textbf{Probl\`eme:} Mesure du premier qubit de $C\ket{0^n}$ donne $1$ avec probabilit\'e $\geq \alpha$? \pause
+    \item \textbf{Promesse:} $\alpha > \beta$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{\sout{\bqp} Promise-\bqp}
+
+  \textbf{AQP} est \bqp-hardu\\
+  \textbf{Preuve (\'ebauche):}
+  $\forall L \in \bqp$, utiliser \textbf{AQP} comme oracle avec $\alpha=\nicefrac{2}{3}, \beta=\nicefrac{1}{3}$
+  \begin{enumerate}
+    \item Fixer $x, Q_n$
+    \item Construire $C_x$ tel que $C_x \ket{0^n}=\ket{x}$
+    \item Joindre $C_x$ et $Q_n$ en un circuit $C'$
+    \item Demander \`a l'oracle $(C', \nicefrac{2}{3}, \nicefrac{1}{3})$
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{R\'esultat 1: \bqp \ faible pour elle m\^eme}
+
+  \[\bqp^{\bqp} = \bqp\]
+\end{frame}
+
+\begin{frame}
+  \frametitle{R\'esultats 2: Inclusions (basiques)}
+
+  \[\textsf{P} \subseteq \bpp \alert{\subseteq} \bqp \subseteq \textsf{PP} \subseteq \textsf{PSPACE} \subseteq \textsf{EXP} \]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Suppositions 1: Hi\'erarchie Polynomiale}
+
+  \[\textsf{P} \subseteq \bpp {\subseteq} \bqp \subseteq \textsf{PP} \subseteq \textsf{PSPACE} \subseteq \textsf{EXP} \]
+  \begin{itemize}
+    \item \textbf{Rappel:} $\textsf{P} = \Sigma_0^p = \Pi_0^p \subseteq \textsf{NP} = \Sigma_1^p \subseteq \cup_k \Delta_k^p = \textsf{PH} \subseteq \textsf{PSPACE}$ \pause
+    \item Fourier Sampling $\in \bqp$, $\notin \textsf{PH}?$
+  \end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+  \frametitle{Conclusion}
+
+  \begin{itemize}
+    \item Mod\`eles de Calcul Quantiques
+    \item QTM
+    \item \bqp \ (\textsf{QMA}, \textsf{EQP}, \textsf{AWPP}, ...)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sources}
+
+  \begin{itemize}
+    \item Bernstein, Verizani 1997, \emph{Quantum Complexity Theory}
+    \item Deutsch 1985, \emph{Quatum Theory, the Church-Turing Principle and the Universal Quantum Computer}
+    \item Fortnow 2003, \emph{One Complexity Theorist's View of Quantum Computing}
+    \item \url{https://complexityzoo.net/}
+  \end{itemize}
+\end{frame}
 
 
 \end{document}

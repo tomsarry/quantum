@@ -71,8 +71,8 @@
 
   Extension logique: adapter les mod\`eles existants pour supporter le calcul quantique:
   \begin{itemize}
-    \item TM (Turing Machine) $\rightarrow$ QTM (Quantum TM)
-    \item Finite Automaton (FA) $\rightarrow$ QFA (Quantum FA)
+    \item Turing Machines (TM) $\rightarrow$ QTM (Quantum TM)
+    \item Finite Automata (FA) $\rightarrow$ QFA (Quantum FA)
     \item Boolean Circuits $\rightarrow$ Quantum Circuits: vu en classe!
     \item Branching Programs (BP) $\rightarrow$ QBP (Quantum BP)
   \end{itemize}
@@ -85,11 +85,9 @@
     \item Turing 1936: Machines de Turing
     \item Cook 1971: Comment prouver $X \in \textsf{NP}$
     \item Baianu 1971: QFA
-    \item Benioff 1980: Machine de calcul quantique
     \item Deutsch 1985: QTM
-    \item Yao 1993: Circuit Quantique
     \item Bernstein, Verizani 1997: Universal QTM (avec co\^ut de simulation \emph{raisonnable})
-    \item Nakanishi et al, 2000: Programme de Branchement Quantique
+    \item Nakanishi, 2000: Programme de Branchement Quantique
   \end{itemize}
 \end{frame}
 
@@ -214,12 +212,10 @@
 \begin{frame}
   \frametitle{Machine de Turing Quantique}
 
-  \textbf{Objectif:} $M_\delta M_\delta^\dag = \mathbb{I} \iff \delta$ valide
-
   \textbf{Theor\`eme (informel)} [BV97]: $\delta$ est valide ssi $M_\delta$ satisfait:
   \begin{enumerate}
     \item Colonnes de longueur unitaire
-    \item Colonnes avec la m\^eme position de la t\^ete de lecture sont orthogonales
+    \item Colonnes avec m\^eme position de la t\^ete de lecture sont orthogonales
     \item Colonnes avec une position de t\^ete qui diff\`ere de 2 cases sont orthogonales
   \end{enumerate}
 \end{frame}
@@ -358,17 +354,6 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{\sout{\bqp} Promise-\bqp}
-
-  \begin{itemize}
-    \item entr\'ee $x$
-    \item Promesse $Q(x)$
-    \item Propri\'et\'e $R(x)$
-  \end{itemize}
-  \[\forall x[Q(x) \rightarrow [M \downarrow x = 1 \iff R(x)]]\]
-\end{frame}
-
-\begin{frame}
   \frametitle{Exemple}
 
   \begin{itemize}
@@ -384,7 +369,7 @@
   \textbf{APPROX-QCIRCUIT-PROB (AQP):}
   \begin{itemize}
     \item \textbf{Entr\'ee:} Circuit Quantique $C$ sur $n$ qubits, $\alpha, \beta \in [0,1]$ \pause
-    \item \textbf{Probl\`eme:} Mesure du premier qubit de $C\ket{0^n}$ donne $1$ avec probabilit\'e $\geq \alpha$? \pause
+    \item \textbf{Probl\`eme:} Mesure du premier qubit de $C\ket{0^n}$ donne $1$ avec probabilit\'e $\geq \alpha$, ou $\leq \beta$? \pause
     \item \textbf{Promesse:} $\alpha > \beta$
   \end{itemize}
 
@@ -412,13 +397,13 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{R\'esultats 2: Inclusions (basiques)}
+  \frametitle{R\'esultat 2: Inclusions (basiques)}
 
   \[\textsf{P} \subseteq \bpp \alert{\subseteq} \bqp \subseteq \textsf{PP} \subseteq \textsf{PSPACE} \subseteq \textsf{EXP} \]
 \end{frame}
 
 \begin{frame}
-  \frametitle{Suppositions 1: Hi\'erarchie Polynomiale}
+  \frametitle{Supposition: Hi\'erarchie Polynomiale}
 
   \[\textsf{P} \subseteq \bpp {\subseteq} \bqp \subseteq \textsf{PP} \subseteq \textsf{PSPACE} \subseteq \textsf{EXP} \]
   \begin{itemize}
